@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segmented Bar Chart</title>
+  <style>
+    /* Style for the overall container */
+    .chart-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    /* Style for the segmented bar */
+    .segmented-bar {
+      display: flex;
+      position: relative;
+    }
+
+    /* Style for each segment */
+    .segment {
+      position: relative;
+      width: 100px; /* Adjust the width as needed */
+      height: 20px; /* Adjust the height as needed */
+      background-color: #3c7656; /* Adjust the background color as needed */
+      /*margin-right: 10px;  Adjust the spacing between segments as needed */
+    }
+
+    /* Style for the arrow indicating the level */
+    .blood-drop {
+  position: absolute;
+  bottom: -15px; /* Adjust the distance of the blood drop below the segments */
+  left: calc(62% + 10px); /* Set the position at 62% of the line */
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 15px solid #ff0000; /* Adjust the color of the blood drop */
+}
+
+    /* Style for the annotation below each segment at the end */
+.annotation {
+  position: absolute;
+  bottom: -25px; /* Adjust the distance of the annotation below the segment */
+  left: 100%; /* Set the annotation at the end of each segment */
+  transform: translateX(-100%);
+  font-size: 12px; /* Adjust the font size as needed */
+  color: #333; /* Adjust the font color as needed */
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="chart-container">
+    <div class="segmented-bar">
+      <div class="segment">
+        <div class="annotation">20</div>
+      </div>
+      <div class="segment">
+        <div class="annotation">40</div>
+      </div>
+      <div class="segment">
+        <div class="annotation">60</div>
+      </div>
+      <div class="segment">
+        <div class="annotation">80</div>
+      </div>
+      <div class="blood-drop"></div>
+    </div>
+  </div>
+
+</body>
+</html>
