@@ -1,4 +1,4 @@
-
+import os
 from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,12 +20,11 @@ from typing import Optional, Dict, Any
 
 app = FastAPI()
 
-# Assuming you have a secret key for JWT signing
-SECRET_KEY = "your-secret-key"
-ALGORITHM = "HS256"
 
-#GPT - Key
-client = OpenAI(api_key="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")
+# Retrieve the value of SECRET_KEY environment variable
+secret_key = os.environ.get("SECRET_KEY")
+ALGORITHM = os.environ.get("ALGORITHM")
+client = os.environ.get("client")
 
 # Excel description 
 fixed_columns = ["Category", "Biomarker", "UOM", "Low_Range", "High_Range"]
