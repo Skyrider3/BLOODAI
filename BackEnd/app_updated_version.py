@@ -17,6 +17,8 @@ from passlib.hash import bcrypt  # Install passlib with: pip install passlib
 import fastapi
 # from database import SessionLocal, ExcelFile
 from typing import Optional, Dict, Any
+from biomarker_reference_values import get_reference_values, get_reference_values_barplot
+
 
 app = FastAPI()
 
@@ -32,7 +34,7 @@ fixed_columns = ["Category", "Biomarker", "UOM", "Low_Range", "High_Range"]
 # CORS settings to allow requests from the frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://c31b-2603-3005-373f-c100-7c25-1730-7f52-9019.ngrok-free.app:3000","*"],# "*" allow any connections from outside #"2601:44:401:e869:885a:6846:8594:f0c7:0","2601:19b:b00:26d0:98e3:e30d:1202:c711","https://76.98.75.253:3000"],  # Adjust this based on your frontend URL
+    allow_origins=["https://4c6b-2601-19b-b00-26d0-14fa-e363-c67d-e017.ngrok-free.app:3000","*"],# "*" allow any connections from outside #"2601:44:401:e869:885a:6846:8594:f0c7:0","2601:19b:b00:26d0:98e3:e30d:1202:c711","https://76.98.75.253:3000"],  # Adjust this based on your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -191,56 +193,6 @@ class ExcelDataResponse(BaseModel):
 #     finally:
 #         db.close()
 
-# New deal with this 
-    
-# Define function to get reference values based on biomarker
-def get_reference_values(biomarker):
-    # Mockup of reference values for demonstration purposes
-    if biomarker == "Ferritin":
-        return [
-            {"id": "1", "color": "red", "min": 0, "max": 3.35},
-            {"id": "2", "color": "orange", "min": 3.35, "max": 3.72},
-            {"id": "3", "color": "yellow", "min": 3.72, "max": 4.09},
-            {"id": "4", "color": "green", "min": 4.09, "max": 4.83},
-            {"id": "5", "color": "yellow", "min": 4.83, "max": 5.2},
-            {"id": "6", "color": "orange", "min": 5.2, "max": 5.57},
-            {"id": "7", "color": "red", "min": 5.7, "max": 6.07}
-        ]
-    else : 
-        return [
-            {"id": "1", "color": "red", "min": 0, "max": 3.35},
-            {"id": "2", "color": "orange", "min": 3.35, "max": 3.72},
-            {"id": "3", "color": "yellow", "min": 3.72, "max": 4.09},
-            {"id": "4", "color": "green", "min": 4.09, "max": 4.83},
-            {"id": "5", "color": "yellow", "min": 4.83, "max": 5.2},
-            {"id": "6", "color": "orange", "min": 5.2, "max": 5.57},
-            {"id": "7", "color": "red", "min": 5.7, "max": 6.07}
-            ]
-    
-####for bar plot 
-    
-def get_reference_values_barplot(biomarker):
-    # Mockup of reference values for demonstration purposes
-    if biomarker == "Ferritin":
-        return [
-            {"id": "alarm-one", "color": "red", "min": 0, "max": 3.35},
-            {"id": "lab-one", "color": "orange", "min": 3.35, "max": 3.72},
-            {"id": "lab-two", "color": "yellow", "min": 3.72, "max": 4.09},
-            {"id": "optimal", "color": "green", "min": 4.09, "max": 4.83},
-            {"id": "lab-three", "color": "yellow", "min": 4.83, "max": 5.2},
-            {"id": "lab-four", "color": "orange", "min": 5.2, "max": 5.57},
-            {"id": "alarm-two", "color": "red", "min": 5.7, "max": 6.07}
-        ]
-    else : 
-        return [
-            {"id": "alarm-one", "color": "red", "min": 0, "max": 3.35},
-            {"id": "lab-one", "color": "orange", "min": 3.35, "max": 3.72},
-            {"id": "lab-two", "color": "yellow", "min": 3.72, "max": 4.09},
-            {"id": "optimal", "color": "green", "min": 4.09, "max": 4.83},
-            {"id": "lab-three", "color": "yellow", "min": 4.83, "max": 5.2},
-            {"id": "lab-four", "color": "orange", "min": 5.2, "max": 5.57},
-            {"id": "alarm-two", "color": "red", "min": 5.7, "max": 6.07}
-            ]
 
 
 # @app.get("/get_excel_data/{file_id}")
