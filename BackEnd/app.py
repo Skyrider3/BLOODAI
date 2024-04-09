@@ -36,7 +36,7 @@ fixed_columns = ["Category", "Biomarker", "UOM", "Low_Range", "High_Range"]
 # CORS settings to allow requests from the frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://e4b7-2601-19b-b00-26d0-c074-ee5f-1507-15f3.ngrok-free.app","*"],# "*" allow any connections from outside #"2601:44:401:e869:885a:6846:8594:f0c7:0","2601:19b:b00:26d0:98e3:e30d:1202:c711","https://76.98.75.253:3000"],  # Adjust this based on your frontend URL
+    allow_origins=["https://3c46-2601-19b-b00-26d0-593e-fdaa-eef5-d69d.ngrok-free.app","*"],# "*" allow any connections from outside #"2601:44:401:e869:885a:6846:8594:f0c7:0","2601:19b:b00:26d0:98e3:e30d:1202:c711","https://76.98.75.253:3000"],  # Adjust this based on your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
@@ -48,7 +48,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 async def read_root():
     return {"message": "Hello, this is a test endpoint new app!"}
 
-DATABASE_URL = "sqlite:///./test.db"
+DATABASE_URL = os.environ.get("Database")
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 
@@ -63,27 +63,36 @@ class ExcelFile(Base):
 Base.metadata.create_all(bind=engine)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+from contextlib import contextmanager
+'''Context manager for database sessions '''
+@contextmanager
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # Step 1: Store Excel File in Database
 
 @app.post("/upload_excel")
 async def upload_excel(file: UploadFile = File(...)):
-    db = SessionLocal()
-    try:    
-        # Store file in database
-        content = file.file.read()
-        db_file = ExcelFile(file_name=file.filename, file_data=content)
-        db.add(db_file)
-        db.commit()
+    with get_db() as db:
+        try:    
+            # Store file in database
+            content = file.file.read()
+            db_file = ExcelFile(file_name=file.filename, file_data=content)
+            db.add(db_file)
+            db.commit()
 
-       # Return the generated file ID
-        return JSONResponse(content={"file_id": db_file.id, "message": "File uploaded successfully"}, status_code=200)
+        # Return the generated file ID
+            return JSONResponse(content={"file_id": db_file.id, "message": "File uploaded successfully"}, status_code=200)
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
 
-    finally:
-        db.close()
+        finally:
+            db.close()
 
 
 # # Step 2: Parse Excel File Data and Send to Frontend       
