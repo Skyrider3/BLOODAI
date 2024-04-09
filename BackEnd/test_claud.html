@@ -1,0 +1,79 @@
+import React, { useState } from 'react';
+
+const Dashboard = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  return (
+    <div className="bg-gray-100 min-h-screen flex flex-col">
+      <nav className="bg-white py-4 px-8 flex justify-between items-center shadow">
+        <div className="text-lg font-semibold">Health Tracker</div>
+        <div className="flex items-center space-x-4">
+          <a href="#" className="text-gray-500 hover:text-gray-700">
+            Support
+          </a>
+          <div className="relative">
+            <div
+              className="text-gray-500 flex items-center space-x-2 hover:text-gray-700 cursor-pointer"
+              onClick={toggleDropdown}
+            >
+              <span>My Account</span>
+              <div className="flex flex-col space-y-1">
+                <div className="w-3 h-1 bg-gray-500 rounded"></div>
+                <div className="w-3 h-1 bg-gray-500 rounded"></div>
+                <div className="w-3 h-1 bg-gray-500 rounded"></div>
+              </div>
+            </div>
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 bg-white shadow-md rounded-md py-2 w-48 z-10">
+                <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                  Biomarkers Analysis
+                </a>
+                <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                  Biomarker Visuals
+                </a>
+                <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                  Diet Recommendations
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+      <main className="flex-grow flex flex-col justify-center items-center p-8">
+        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+          <div className="mt-8">
+            <label htmlFor="blood-report" className="block text-gray-700 font-semibold mb-2">
+              Upload Blood Report
+            </label>
+            <div className="flex items-center justify-center bg-gray-100 rounded-md py-4">
+              <label
+                htmlFor="blood-report-input"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded cursor-pointer"
+              >
+                Choose File
+              </label>
+              <input id="blood-report-input" type="file" className="hidden" />
+              <span className="ml-4 text-gray-500">No file chosen</span>
+            </div>
+          </div>
+          <div className="mt-8">
+            <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded">
+              Integrate Health Apps
+            </button>
+          </div>
+          <div className="mt-4">
+            <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded">
+              Select Medical Care
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;
