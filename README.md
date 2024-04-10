@@ -1,62 +1,61 @@
-<<<<<<< HEAD
-# BLOODAI
+# BLOOD AI
 
-=======
-# GPTWrapper
-# python3 -m pip install  uvicorn[standard]
-# python3 uvicorn main:app --reload
-# pip3 install python-multipart
-# pip3 install --upgrade openai
-# pip3 install -U fastapi[all]
-# pip3 install PyPDF2
+## Installation
 
-# Additional Packages to Install - Dept
+```bash
+python3 -m pip install uvicorn[standard]
+pip3 install python-multipart
+pip3 install --upgrade openai
+pip3 install -U fastapi[all]
+pip3 install PyPDF2
+```
 
-### Implement Docker Containerization for this 
+## Additional Packages to Install
+
+- Docker Containerization
 
 ## Ideas
 
+- Docker containerization implementation
+- Modularize code and explore GitHub repositories for collaboration
+- Enhance error handling for datetime objects
 
-## running 
-# start virtual environment
- 
-# In 1st termianl run 
-### ngrok http 8000
-### copy the relevant "https://14fc-2601-19b-b00-26d0-d9f7-d24a-cc11-4eda.ngrok-free.app:3000 "  to the "allow_origins= "https://3eea-2601-19b-b00-26d0-d9f7-d24a-cc11-4eda.ngrok-free.app:3000"... in the app.py
+## Running
 
+### Setting Up
 
+#### First Terminal:
 
-# In second terminal run 
-### uvicorn app:app --reload --workers 1 --host 0.0.0.0 --port 8000
+```bash
+ngrok http 8000
+```
 
-# in front end we need to change this 
+Copy the ngrok URL to replace in the `allow_origins` field in `app.py`.
 
-# "https://e8ff-2601-19b-b00-26d0-bd23-a214-cc68-e5fb.ngrok-free.app" chnage this according to the generated ngrocck service
+#### Second Terminal:
 
+```bash
+uvicorn app:app --reload --workers 1 --host 0.0.0.0 --port 8000
+```
 
-### check for github repos for modularise code
+Update frontend URLs accordingly.
 
+## Learnings
 
-### Learnings
+- Error Handling: Resolve issues with datetime object serialization for JSON.
 
-# error:  {"detail":"datetime.datetime(2018, 3, 22, 0, 0)"} The error you're encountering suggests that there's a datetime object present in your data, which cannot be directly serialized to JSON. To resolve this issue, you need to handle datetime objects appropriately, perhaps by converting them to strings or some other format that can be serialized to JSON. Here's how you can modify your code to handle datetime object
+## Endpoints
 
-<!-- 
-@app.get("/get_excel_data/{file_id}")
-@app.get("/get_excel_data_biomarkerslist/{file_id}/{count}")
-@app.get("/get_excel_data_biomarkers/{file_id}")
-@app.get("/get_biomarker_info/{file_id}/{biomarker_name}")
+- `/get_excel_data/{file_id}`
+- `/get_excel_data_biomarkerslist/{file_id}/{count}`
+- `/get_excel_data_biomarkers/{file_id}`
+- `/get_biomarker_info/{file_id}/{biomarker_name}`
+- `/generate_text/{file_id}/{queryprompt}`
 
-@app.get("/generate_text/{file_id}/{queryprompt}") -->
+### Modifications
 
-
-### check page 3 value on the horizontal bar part
-
-###### Modifications
-
-# page 1 : Customer details end point
-# page 2 : Inncorect horizontal bar details -- we dont need all the reference values, we just need 3 levels [ below , safe , above(Red) ]
-# page 3 : Send Graph detail
-# page 4 : Add the Diet and Exercise functionalies to OPENAI AI
-# page 5 : git 
->>>>>>> master
+1. Customer details endpoint refinement.
+2. Simplify horizontal bar details: display only three levels (below, safe, above-Red).
+3. Improve Graph detail delivery.
+4. Add Diet and Exercise functionalities to OpenAI AI.
+5. Git-related enhancements.
