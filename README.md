@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 # BLOODAI
-BLOODAI
+
 =======
 # GPTWrapper
 # python3 -m pip install  uvicorn[standard]
