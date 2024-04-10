@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Question Paper Generator</title>
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', path='/Elon_Musk_Colorado.jpg') }}"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', path='/main.css') }}" />
+  </head>
+  <body>
+    <img src="{{ url_for('static', path='/Elon_Musk_Colorado.jpg') }}" class="icon" />
+    <h3>Question Paper Generator</h3>
+
+    <!-- File Upload Form -->
+    <!-- <form action="/upload" method="post" enctype="multipart/form-data">
+      <label for="file">Upload Textbook:</label>
+      <input type="file" name="file" accept=".pdf, .doc, .docx" required />
+      <input type="submit" value="Upload" />
+    </form> -->
+
+    <!-- Question Paper Generation Form -->
+    <form action="/generate_question_paper" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".pdf, .doc, .docx,.txt" required />
+        <input type="submit" value="Generate Question Paper">
+    </form>
+    
+
+    {% if uploaded_file %}
+      <!-- Display Uploaded Textbook Information -->
+      <div class="uploaded-info">
+        <h4>Uploaded Textbook Information:</h4>
+        <p>File Name: {{ uploaded_file.filename }}</p>
+        <p>File Size: {{ uploaded_file.content_length }} bytes</p>
+        <p>File Type: {{ uploaded_file.content_type }}</p>
+      </div>
+    {% endif %}
+
+    {% if result %}
+      <!-- Display Question Paper or Result -->
+      <div class="result">
+        <h4>Generated Question Paper:</h4>
+        <p>{{ result }}</p>
+      </div>
+    {% endif %}
+  </body>
+</html>

@@ -1,0 +1,6 @@
+#  env_setup.py --> s during deployment, make sure this is not directly uploaded into hostong service platform. ex:store sensitive information like database credentials in environment variables so be carefull 
+
+# When deploying your application, you need to set the environment variables on the server or hosting platform. The process of setting environment variables varies depending on your deployment environment. Example: on Heroku, you can set environment variables through the web dashboard or using the Heroku CLI.
+#  you can securely store sensitive information like database credentials in environment variables and access them in your server-side code by adding "env_setup.py" to .gitignore
+
+# Remember to never commit the .env file to your version control system, as it contains sensitive information. Always add it to your .gitignore file to prevent accidental commits.

@@ -1,0 +1,19 @@
+
+python3 -m pip install  uvicorn[standard]
+python3 uvicorn main:app --reload
+pip3 install python-multipart
+pip3 install --upgrade openai
+pip3 install -U fastapi[all]
+pip3 install PyPDF2
+pip3 install pandas
+pip3 install sqlalchemy
+pip3 install pycryptodome
+
+### things  i need to fix
+
+##how to run this app
+
+## create virtual env - done
+## link database and use postman to see if the file is saved in db
+## in step2 - figure out what data you are going to send to frontend.
+
