@@ -48,7 +48,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 async def read_root():
     return {"message": "Hello, this is a test endpoint new app!"}
 
-DATABASE_URL = os.environ.get("Database")
+DATABASE_URL = "sqlite:///./test.db" #os.environ.get("Database") 
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 
