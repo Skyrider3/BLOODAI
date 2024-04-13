@@ -36,7 +36,7 @@ fixed_columns = ["Category", "Biomarker", "UOM", "Low_Range", "High_Range"]
 # CORS settings to allow requests from the frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://3c46-2601-19b-b00-26d0-593e-fdaa-eef5-d69d.ngrok-free.app","*"],# "*" allow any connections from outside #"2601:44:401:e869:885a:6846:8594:f0c7:0","2601:19b:b00:26d0:98e3:e30d:1202:c711","https://76.98.75.253:3000"],  # Adjust this based on your frontend URL
+    allow_origins=["https://245b-2601-19b-b00-26d0-385b-a816-e347-9901.ngrok-free.app","*"],# "*" allow any connections from outside #"2601:44:401:e869:885a:6846:8594:f0c7:0","2601:19b:b00:26d0:98e3:e30d:1202:c711","https://76.98.75.253:3000"],  # Adjust this based on your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
@@ -204,10 +204,6 @@ async def get_biomarkers(file_id: int) :
 
 #### need to send data in json list 
 
-
-
-
-
 ##page3 dynamic part of it 
 # Sample data for reference values (you can replace this with your actual data) --------------fill this
 @app.get("/get_biomarker_info/{file_id}/{biomarker_name}")
@@ -263,10 +259,38 @@ async def get_biomarker_info(file_id: int, biomarker_name: str):
    
 
 
-@app.get("/get_excel_data_LineChart/{file_id}/{biomarker}")
-async def get_excel_data_LineChart(file_id: int, biomarker : str):
+@app.get('/get_available_dates/{file_id}/dates')
+async def get_available_dates(file_id: int):
+    db = SessionLocal()
+
+    try:
+        # Retrieve file data from the database
+        excel_file = db.query(ExcelFile).filter(ExcelFile.id == file_id).first()
+        if not excel_file:
+            raise HTTPException(status_code=404, detail="File not found")
+
+        # Parse Excel file data as bytes
+        content_bytes = excel_file.file_data
+
+        # Use BytesIO to create a file-like object
+        excel_data = BytesIO(content_bytes)
+
+        # Process the Excel data using pandas
+        df = pd.read_excel(excel_data)
+
+        blood_test_dates = [col for col in df.columns if col not in fixed_columns]
+
+        return blood_test_dates
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
+
+@app.get("/get_excel_data_pie/{file_id}/{date}")
+async def get_excel_data_pie(file_id: int, date: str):
     '''
-        This Function is for the sending the specific biomarker value with respective dates, data used for graph plot 
+    This function returns the list of biomarkers in below, within, and above range for a specific date.
     '''
     db = SessionLocal()
 
@@ -285,28 +309,76 @@ async def get_excel_data_LineChart(file_id: int, biomarker : str):
         # Process the Excel data using pandas
         df = pd.read_excel(excel_data)
 
-        varying_columns_in_uploaded_excel = [col for col in df.columns if col not in fixed_columns]
+        # Create lists to store biomarkers in each range
+        below_range_biomarkers = []
+        within_range_biomarkers = []
+        above_range_biomarkers = []
 
-        graph_data ={}
-        list_dates = []
-        list_values = []
-        for i in varying_columns_in_uploaded_excel:
-            biomarker_date = i
-            biomarker_value = df.loc[df['Biomarker'] == biomarker, i].iloc[0]
-            # print(type(biomarker_date))
-            # print(type(biomarker_value))
-            list_dates.append(biomarker_date)
-            list_values.append(biomarker_value)
-            #graph_data[biomarker_date] =  biomarker_value
-        graph_data["date"] = list_dates
-        graph_data["values"] = list_values
-        
-        return graph_data
-        #return graph_data
+        # Iterate over each row
+        for _, row in df.iterrows():
+            biomarker = row['Biomarker']
+            biomarker_value = row[date]
+            biomarker_low_range = row['Low_Range']
+            biomarker_high_range = row['High_Range']
+
+            if biomarker_value < biomarker_low_range:
+                below_range_biomarkers.append(biomarker)
+            elif biomarker_low_range <= biomarker_value <= biomarker_high_range:
+                within_range_biomarkers.append(biomarker)
+            else:
+                above_range_biomarkers.append(biomarker)
+
+        # Prepare the response data
+        response_data = {
+            "below_range_biomarkers": below_range_biomarkers,
+            "within_range_biomarkers": within_range_biomarkers,
+            "above_range_biomarkers": above_range_biomarkers
+        }
+
+        return response_data
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
 
+@app.get("/get_excel_data_LineChart/{file_id}/{biomarker}")
+async def get_excel_data_LineChart(file_id: int, biomarker: str):
+    '''
+    This Function is for sending the specific biomarker values with respective dates,
+    data used for graph plot
+    '''
+    db = SessionLocal()
+    try:
+        # Retrieve file data from the database
+        excel_file = db.query(ExcelFile).filter(ExcelFile.id == file_id).first()
+        if not excel_file:
+            raise HTTPException(status_code=404, detail="File not found")
+
+        # Parse Excel file data as bytes
+        content_bytes = excel_file.file_data
+
+        # Use BytesIO to create a file-like object
+        excel_data = BytesIO(content_bytes)
+
+        # Process the Excel data using pandas
+        df = pd.read_excel(excel_data)
+
+        blood_test_dates = [col for col in df.columns if col not in fixed_columns]
+    
+        graph_data = {"dates": [], "values": []}
+        
+        for column in blood_test_dates:
+            biomarker_date = pd.to_datetime(column).strftime("%Y-%m-%d")
+            biomarker_value = df.loc[df['Biomarker'] == biomarker, column].iloc[0]
+
+            graph_data["dates"].append(biomarker_date)
+            graph_data["values"].append(biomarker_value)
+
+        return graph_data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     finally:
         db.close()
 
@@ -548,6 +620,10 @@ async def generate_biomarker_content(file_id: int, biomarker: str, query: str):
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         db.close()
+
+
+
+
 
 ## Adding additional Functionalities
 
