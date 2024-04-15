@@ -678,12 +678,12 @@ import fastapi
 import openai,json, uvicorn,asyncio
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta
-
-from database import get_db
+from database import get_db, create_tables
 from models import UserModel, ExcelFile
 from schemas import Token
 
 app = FastAPI()
+create_tables()
 
 # Retrieve the value of SECRET_KEY environment variable
 secret_key = os.environ.get("SECRET_KEY")
@@ -693,7 +693,7 @@ client = os.environ.get("client")
 # CORS settings to allow requests from the frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://3824-2601-19b-b00-26d0-454f-f48a-6be4-d2b1.ngrok-free.app","*"],# "*" allow any connections from outside #"2601:44:401:e869:885a:6846:8594:f0c7:0","2601:19b:b00:26d0:98e3:e30d:1202:c711","https://76.98.75.253:3000"],  # Adjust this based on your frontend URL
+    allow_origins=["https://89cf-2601-19b-b00-26d0-e534-352a-3e94-e712.ngrok-free.app","*"],# "*" allow any connections from outside #"2601:44:401:e869:885a:6846:8594:f0c7:0","2601:19b:b00:26d0:98e3:e30d:1202:c711","https://76.98.75.253:3000"],  # Adjust this based on your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
@@ -753,25 +753,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db=None):
     return user
 
 class CustomOAuth2PasswordRequestForm(OAuth2PasswordRequestForm):
-    username: str = Form(...)
-    password: str = Form(...)
-    name: str = Form(...)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(
-            *args,
-            args=[],  # Set args to an empty list
-            kwargs={},  # Set kwargs to an empty dictionary
-        )
-        self.username = kwargs.get("username")
-        self.password = kwargs.get("password")
-        self.name = kwargs.get("name")
+    def __init__(self, username: str = Form(...), password: str = Form(...), name: str = Form(...)):
+        super().__init__(username=username, password=password, scope="")
+        self.name = name
 
 @app.post("/api/signup")
 async def signup(
     form_data: CustomOAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ):
+    print("inside")
     user = db.query(UserModel).filter(UserModel.email == form_data.username).first()
     if user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -785,8 +776,6 @@ async def signup(
 async def signin(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db=Depends(get_db),
-    args: Optional[str] = None,  # Add this line
-    kwargs: Optional[str] = None,  # Add this line
 ):
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
@@ -796,6 +785,16 @@ async def signin(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+# send login user details to the front end
+@app.get("/api/user")
+async def get_user(current_user: UserModel = Depends(get_current_user)):
+    return {
+        "name": current_user.name
+        # Add other relevant user fields as needed
+    }
+
+# @app.post("/upload_excel") this should be able to save any file into db and foe excel files it should use this "content = file.file.read() db_file = ExcelFile(file_name=file.filename, file_data=content, user=current_user) db.add(db_file) db.commit()"
 
 @app.post("/upload_excel")
 async def upload_excel(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
@@ -809,7 +808,34 @@ async def upload_excel(file: UploadFile = File(...), db: Session = Depends(get_d
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-# # Step 2: Parse Excel File Data and Send to Frontend       
+
+# @app.get("/get_files")
+# async def get_files(current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+#     files = db.query(ExcelFile).filter(ExcelFile.user == current_user).all()
+#     return {"files": files}
+
+# @app.get("/download_file/{file_id}")
+# async def download_file(file_id: int, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+#     file = db.query(ExcelFile).filter(ExcelFile.id == file_id).first()
+#     if file is None:
+#         raise HTTPException(status_code=404, detail="File not found")
+#     if file.user != current_user:
+#         raise HTTPException(status_code=403, detail="You are not authorized to download this file")
+#     return StreamingResponse(file.file_data, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+# @app.get("/delete_file/{file_id}")
+# async def delete_file(file_id: int, current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)):
+#     file = db.query(ExcelFile).filter(ExcelFile.id == file_id).first()
+#     if file is None:
+#         raise HTTPException(status_code=404, detail="File not found")
+#     if file.user != current_user:
+#         raise HTTPException(status_code=403, detail="You are not authorized to delete this file")
+#     db.delete(file)
+#     db.commit()
+#     return {"message": "File deleted successfully"}
+
+
+# Step 2: Parse Excel File Data and Send to Frontend       
 
 # # Define a Pydantic model for an individual row in the response
 # from typing import Optional
@@ -829,8 +855,7 @@ async def upload_excel(file: UploadFile = File(...), db: Session = Depends(get_d
 
 
 # #experiment  -- page2 for next and prev functionality
-# #divide the list of biomarkers in sets of 9 -- done
-# #send only the biomarkers that are requested by page2  ---done
+# #divide the list of biomarkers in sets of 9 
 # @app.get("/get_excel_data_biomarkerslist/{file_id}/{count}")
 # async def get_excel_data(file_id: int, count: int):
 #     db = SessionLocal()
