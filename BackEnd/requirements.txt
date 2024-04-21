@@ -9,11 +9,8 @@ pip3 install pandas
 pip3 install sqlalchemy
 pip3 install pycryptodome
 
-### things  i need to fix
 
-##how to run this app
-
-## create virtual env - done
-## link database and use postman to see if the file is saved in db
-## in step2 - figure out what data you are going to send to frontend.
-
+# make chanegs to piechart
+# add bio marker gap analysis
+# add risk analysis
+# according to the bio marker analysis, give a list of doctors

@@ -1,4 +1,6 @@
-# GPTWrapper
+# BloodAPP
+
+
 # python3 -m pip install  uvicorn[standard]
 # python3 uvicorn main:app --reload
 # pip3 install python-multipart

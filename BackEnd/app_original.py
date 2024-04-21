@@ -179,7 +179,7 @@ async def get_excel_data_LineChart(file_id: int):
 
 
 # Step 3: OpenAI API Functionality
-OPENAI_API_KEY = "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"  # Replace with your OpenAI API key
+OPENAI_API_KEY =  # Replace with your OpenAI API key
 openai.api_key = OPENAI_API_KEY
 
 # @app.get("/generate_text/{file_id}")
@@ -250,7 +250,7 @@ async def generate_text(file_id: int):
         # gpt_query = prompt + " from this given health data, give me recommendations"
         gpt_query = prompt + " from this given health data, give me recommendations on what food to eat and dietry precautions to take"
 
-        client = OpenAI(api_key="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")
+        client = OpenAI(api_key="")
 
         def send_openai_request(gpt_query):
             response = client.chat.completions.create(
