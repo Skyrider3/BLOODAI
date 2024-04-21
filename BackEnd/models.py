@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from database import Base
+from database import Base,DoctorsBase
 
 class ExcelFile(Base):
     __tablename__ = "excel_files"
@@ -22,3 +22,13 @@ class UserModel(Base):
     zip_code = Column(String)
     country = Column(String)
     files = relationship("ExcelFile", back_populates="user")
+
+class Doctor(DoctorsBase):
+    __tablename__ = "doctors"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    specialty = Column(String)
+    # email = Column(String, unique=True, index=True)
+    location = Column(String)
+    phone = Column(String)
