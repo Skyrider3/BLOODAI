@@ -39,13 +39,6 @@
 
 # error:  {"detail":"datetime.datetime(2018, 3, 22, 0, 0)"} The error you're encountering suggests that there's a datetime object present in your data, which cannot be directly serialized to JSON. To resolve this issue, you need to handle datetime objects appropriately, perhaps by converting them to strings or some other format that can be serialized to JSON. Here's how you can modify your code to handle datetime object
 
-<!-- 
-@app.get("/get_excel_data/{file_id}")
-@app.get("/get_excel_data_biomarkerslist/{file_id}/{count}")
-@app.get("/get_excel_data_biomarkers/{file_id}")
-@app.get("/get_biomarker_info/{file_id}/{biomarker_name}")
-
-@app.get("/generate_text/{file_id}/{queryprompt}") -->
 
 
 ### check page 3 value on the horizontal bar part
@@ -54,6 +47,18 @@
 
 # page 1 : Customer details end point
 # page 2 : Inncorect horizontal bar details -- we dont need all the reference values, we just need 3 levels [ below , safe , above(Red) ]
-# page 3 : Send Graph detail
-# page 4 : Add the Diet and Exercise functionalies to OPENAI AI
+# page 3 : 
+# page 4 : Add the Diet and Exercise functionalies to OPENAI AI, Change this to OpenBioLLM-70B Model https://huggingface.co/aaditya/Llama3-OpenBioLLM-70B
 # page 5 : git 
+# Added download report Functionality to the Navigation bar
+
+# Implement : Generate graph visualiztion of BioMarker interactions :  https://gephi.org/users/tutorial-visualization/.
+
+## RESEARCH
+# 1) We need to implement the correlation analysis for Biomarker interactions
+# 2) we need to figiure out which biomarkers are highly correlated and we can skip those in blood tests
+# 3) Implementation : single patient multiple tests in the trail and tracking other variables for effect on the outcomes
+
+### Try Monto Carlo simulation [ Deep Research ]
+
+

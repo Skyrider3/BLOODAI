@@ -446,5 +446,9 @@ async def generate_text(queryprompt: str, db: Session = Depends(get_db), current
 
 ## Adding additional Functionalities
 
+# Adding bio marker gap analysis - set of biomarkers tested and set of bio markers not tested : potential biomarkers to test [ map of different biomarkers so that we can see the correlation of one biomarker with the other and recommend the user to get tested for potential biomarker.]
+
+# Adding biomarker risk analysis -- Implenmt knowledge Graph to evaluate and map different biomarker effects and their risk anlysis [ For Initial Phase Map few Biomarkers and their combined risk analysis : either knowledge graph / rag trained on medical documents ]
+
 if __name__ == "__main__":
     uvicorn.run('app:app', host="localhost", port=8080, reload=True)
