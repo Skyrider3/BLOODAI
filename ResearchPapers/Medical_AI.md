@@ -1,0 +1,1 @@
+Capabilities of Gemini Models in Medicine : https://arxiv.org/pdf/2404.18416

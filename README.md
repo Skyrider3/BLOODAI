@@ -46,7 +46,7 @@
 ###### Modifications
 
 # page 1 : Customer details end point
-# page 2 : Inncorect horizontal bar details -- we dont need all the reference values, we just need 3 levels [ below , safe , above(Red) ]
+# page 2 : Inncorect horizontal bar details -- we dont need all the reference values, we just need 3 levels [ below , safe , above(Red) ], so cahnge the biomarker_reference_values.py
 # page 3 : 
 # page 4 : Add the Diet and Exercise functionalies to OPENAI AI, Change this to OpenBioLLM-70B Model https://huggingface.co/aaditya/Llama3-OpenBioLLM-70B
 # page 5 : git 
@@ -62,3 +62,16 @@
 ### Try Monto Carlo simulation [ Deep Research ]
 
 
+## Developer tools required:
+
+# Database options : Graphdb, also think about knowledge graphs
+# Computing Resources : GCP, AWS
+# Developer Resources : Copilot, VScode, gephi
+
+
+<!-- Addressing Privacy Concerns: In industries dealing with sensitive data, such as healthcare, using general LLMs may pose privacy challenges. Domain-specific LLMs can provide a closed framework, ensuring the protection of confidential data and adherence to privacy agreements. -->
+
+## https://github.com/Kent0n-Li/ChatDoctor : check this LLM [ Fine Tuned for health care domain]
+
+
+## Implementing a RAG for Health care 
