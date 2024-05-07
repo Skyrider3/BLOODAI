@@ -75,3 +75,9 @@
 
 
 ## Implementing a RAG for Health care 
+
+# Researchers built simulated AI hospital where “doctor” agents work with simulated “patients” & improve:
+
+# “After treating around ten thousand patients, the evolved doctor agent achieves a state-of-the-art accuracy of 93.06% on a subset of the MedQA dataset that covers major respiratory diseases.”
+
+Paper :https://arxiv.org/abs/2405.02957
